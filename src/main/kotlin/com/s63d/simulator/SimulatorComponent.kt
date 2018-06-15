@@ -19,6 +19,8 @@ class SimulatorComponent : CommandLineRunner {
     @Value("\${carTrackers:}")
     val carTrackers = listOf<String>()
 
+
+
     override fun run(vararg args: String?) {
         println("I'm sleeping for $SLEEP_TIME")
         println("The cartrackers: $carTrackers")
