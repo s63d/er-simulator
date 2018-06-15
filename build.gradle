@@ -47,6 +47,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-mongodb')
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.3"
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+"
 }
 
 kotlin {
