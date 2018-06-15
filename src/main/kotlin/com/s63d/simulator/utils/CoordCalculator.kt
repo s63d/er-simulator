@@ -14,7 +14,7 @@ fun distance(c1: GeoJsonPoint, c2: GeoJsonPoint): Double {
     dist *= 60.0 * 1.1515
     return Math.round(dist * 1.609344 * 1000).toDouble()
 }
-fun distance(c1: Point, c2: Point) = distance(GeoJsonPoint(c1.x.toDouble(), c1.y.toDouble()), GeoJsonPoint(c2.x.toDouble(), c2.y.toDouble()))
+fun distance(c1: Point, c2: Point) = distance(GeoJsonPoint(c1.x, c1.y), GeoJsonPoint(c2.x, c2.y))
 
 private fun deg2rad(deg: Double)=  deg * Math.PI / 180.0
 
