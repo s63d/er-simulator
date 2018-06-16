@@ -18,21 +18,11 @@ import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
 import kotlin.math.roundToInt
 
-class SimulatorTask(private val route: RoutesItem, private val carTracker: String) {
+class SimulatorTask(private val route: RoutesItem, private val carTracker: String, private val REAL_LIFE_TIME: Int, private val SLEEP_TIME: Int, private val endpoint: String, private val rabbitTemplate: RabbitTemplate) {
 
     companion object {
         val restTemplate = RestTemplate()
-        val rabbitTemplate = RabbitTemplate()
     }
-    @Value("\${real-life:30}")
-    val REAL_LIFE_TIME = 30
-
-    @Value("\${sleep:0}")
-    val SLEEP_TIME = 0
-
-    @Value("\${endpoint:https://api.ersols.online/v1}")
-    val endpoint = ""
-
 
     private val logger = LoggerFactory.getLogger(this::class.java)
     private var tripId: Long = -1
@@ -50,8 +40,8 @@ class SimulatorTask(private val route: RoutesItem, private val carTracker: Strin
 
         logger.info("Loading trip id for carTracker $carTracker")
         try {
-            val response = restTemplate.postForObject("$endpoint/trips", request, TripResponse::class.java)!!
-            logger.info("Loaded trip id ${response.id} for tracker $carTracker")
+            val response = restTemplate.postForObject( "$endpoint/trips", request, TripResponse::class.java)!!
+            logger.debug("Loaded trip id ${response.id} for tracker $carTracker")
             tripId = response.id
         } catch(ex: Exception) {
             logger.error(ex.toString())
@@ -117,7 +107,7 @@ class SimulatorTask(private val route: RoutesItem, private val carTracker: Strin
     }
 
     private fun finishRoute() {
-
+        restTemplate.postForLocation("$endpoint/trips/$tripId/finished", null)
     }
 
 }

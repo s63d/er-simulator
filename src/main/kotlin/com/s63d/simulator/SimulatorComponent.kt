@@ -5,13 +5,14 @@ import com.s63d.simulator.utils.random
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.slf4j.LoggerFactory
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class SimulatorComponent(private val routeRepository: RouteRepository) : CommandLineRunner {
+class SimulatorComponent(private val routeRepository: RouteRepository, private val rabbitTemplate: RabbitTemplate) : CommandLineRunner {
     private val logger = LoggerFactory.getLogger(this::class.java)!!
 
     @Value("\${sleep:5000}")
@@ -63,12 +64,11 @@ class SimulatorComponent(private val routeRepository: RouteRepository) : Command
                     async {
                         val route = routes.random()
                         logger.info("    - Route ${route.id}")
-                        val task = SimulatorTask(route, carTracker)
+                        val task = SimulatorTask(route, carTracker, REAL_LIFE_TIME, SLEEP_TIME, endpoint, rabbitTemplate)
                         task.loadTripId()
                         task.run()
                     }
                 }
-                logger.info("")
             }
         }
 
