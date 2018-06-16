@@ -93,7 +93,12 @@ class SimulatorTask(private val route: RoutesItem, private val carTracker: Strin
             }
         }
         finishRoute()
-        logger.info("Finished route")
+        logger.info("Finished trip #${tripId}")
+        logger.info("  - Car tracker: $carTracker")
+        logger.info("  - Route id: ${route.id}")
+        logger.info("    - duration: ${route.legs[0].duration.text}")
+        logger.info("    - distance: ${route.legs[0].distance.text}")
+
     }
 
     private fun updateLocation() {
